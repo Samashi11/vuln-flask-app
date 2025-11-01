@@ -43,8 +43,13 @@ def login():
         password = request.form.get("password", "")
 
         db = get_db()
-        query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
-        cur = db.execute(query)
+        # query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
+        # cur = db.execute(query)
+
+        # fix: parameterized query
+        query = "SELECT * FROM users WHERE username = ? AND password = ?"
+        cur = db.execute(query, (username, password))
+
         user = cur.fetchone()
 
         if user:
